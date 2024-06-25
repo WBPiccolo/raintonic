@@ -1,14 +1,11 @@
 <mat-form-field class="example-full-width">
-  <mat-label>Number</mat-label>
-  <input type="text" placeholder="Pick one" aria-label="Number" matInput name="autocompleteString"
-    [ngModel]="autocompleteString" (ngModelChange)="searchTermChanged.emit($event)" [matAutocomplete]="auto">
-  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selectOption($event)">
-    @for (option of cities; track option) {
-    <mat-option [value]="option">{{option.name}}</mat-option>
-    }
-  </mat-autocomplete>
+  <input type="text" placeholder="Start typing" aria-label="Number" matInput name="autocompleteString"
+    [formControl]="autocompleteFormControl" [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selectOption($event)">
+      @for (option of cities; track option) {
+      <mat-option [value]="option">{{option.name}}</mat-option>
+      }
+    </mat-autocomplete>
 </mat-form-field>
 
-{{autocompleteString }}
-
-{{cities | json}}
+<button mat-flat-button [disabled]="!selectedCity" (click)="emitSearchByCityClicked()">Search</button>

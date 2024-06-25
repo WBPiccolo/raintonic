@@ -1,53 +1,58 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, inject } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
-import { Observable, of } from 'rxjs';
-import { City } from '../../../core/models/city';
+import { Observable, Subject, of, takeUntil } from 'rxjs';
+import { City } from '../../../core/models/city.model';
 
 @Component({
   selector: 'app-city-search',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, MatButtonModule],
   templateUrl: './city-search.component.html',
   styleUrl: './city-search.component.scss'
 })
-export class CitySearchComponent {
+export class CitySearchComponent implements OnInit, OnDestroy {
   @Input() cities: City[] = [];
-  
-  // @Input() set cities(cities: City[]) {
-  //   this._cities = cities;
-  //   //this.filteredCities = cities;
-  // };
+
   @Output() searchTermChanged = new EventEmitter<string>();
-  @Output() searchByCityClicked = new EventEmitter<any>();
+  @Output() searchByCityClicked = new EventEmitter<City>();
 
-  /*private _cities: City[] = [];
-  filteredCities: City[] = [];*/
-  //filteredCities = new Observable<City[]>();
+  autocompleteFormControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(2)]);
 
-  autocompleteString: string = '';
-  //autocompleteControl: FormControl = new FormControl('');
+  selectedCity: City = null;
 
-  //filteredOptions = of([])
+  private destroy$ = new Subject<boolean>();
 
+  ngOnInit(): void {
+    this.autocompleteFormControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(newVal => {
+      console.log(newVal);
+      this.selectedCity = null;
+      this.searchTermChanged.emit(newVal);
+    })
+  }
 
-
-  /*private _filter(value: string): City[] {
-    console.log('_filter', value);
-    const filterValue = value.toLowerCase();
-    return this.filteredCities.filter(city => city.name?.toLowerCase().includes(filterValue));
-  }*/
+  emitSearchByCityClicked() {
+    console.log(this.autocompleteFormControl.value, this.selectedCity)
+    this.searchByCityClicked.emit(this.autocompleteFormControl.value);
+  }
 
   selectOption(option: MatAutocompleteSelectedEvent) {
-    console.log('selectOption', option);
+    this.selectedCity = option.option.value;
+
   }
 
   displayFn(city: City): string {
-    return city.name ? city.name : '';
+    return city?.name ? city.name : '';
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
 }
