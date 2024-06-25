@@ -6,6 +6,7 @@ import { City } from './core/models/city.model';
 import { HttpOpenMeteoService } from './core/services/http-open-meteo.service';
 import { CityInfoComponent } from "./shared/components/city-info/city-info.component";
 import { WeatherData } from './core/models/weatherData.model';
+import { LocalStorageService } from './core/models/local-storage.service';
 
 @Component({
     selector: 'app-root',
@@ -16,6 +17,7 @@ import { WeatherData } from './core/models/weatherData.model';
 })
 export class AppComponent {
   httpOpenMeteoService = inject(HttpOpenMeteoService);
+  localStorageService = inject(LocalStorageService)
   cities$: Observable<City[]> = of([]);
   selectedCity: City;
 
@@ -32,5 +34,16 @@ export class AppComponent {
   onSearchByCityClicked(data: City) {
     this.selectedCity = data;
     this.weatherData$ = this.httpOpenMeteoService.getWeatherData(data);
+  }
+
+  addOrRemoveFromFavourites(city: City) {
+    city.isFavourite = !city.isFavourite;
+
+    if(city.isFavourite) {
+      this.localStorageService.addCity(city);
+    } else {
+      this.localStorageService.removeCity(city);
+    }
+    //TODO: Localstorage service
   }
 }

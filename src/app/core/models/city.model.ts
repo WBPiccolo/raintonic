@@ -17,4 +17,6 @@ export interface City {
     admin1?: string;
     admin2?: string;
     admin3?: string;
+
+    isFavourite?: boolean
 }

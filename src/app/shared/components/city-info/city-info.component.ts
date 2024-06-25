@@ -17,7 +17,6 @@ export class CityInfoComponent {
   
 
   get formattedLocationData() {
-    //TODO: concatenare admin1, admin2, admin 3 e country, skippando quelli uguali
     const formattedAdmin: string[] = [this.city.admin3, this.city.admin2, this.city.admin1].filter(admin => admin && admin.toLowerCase() != this.city.name.toLowerCase());
     const set = new Set(formattedAdmin);
     return `${Array.from(set).join(', ')}, ${this.city.country}`;
