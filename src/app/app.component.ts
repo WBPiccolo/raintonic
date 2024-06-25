@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CitySearchComponent } from "./shared/components/city-search/city-search.component";
-import { Observable, of } from 'rxjs';
+import { Observable, map, of, switchMap, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { City } from './core/models/city.model';
 import { HttpOpenMeteoService } from './core/services/http-open-meteo.service';
@@ -21,11 +21,20 @@ export class AppComponent implements OnInit{
   cities$: Observable<City[]> = of([]);
   selectedCity: City;
 
-  favouriteCities$: Observable<City[]> = new Observable<City[]>();
+  favouriteCitiesWeather$: Observable<WeatherData[]> = new Observable<WeatherData[]>();
   weatherData$: Observable<WeatherData> = new Observable();
 
   ngOnInit(): void {
-    this.favouriteCities$ = this.localStorageService.getCitiesObs();
+    this.favouriteCitiesWeather$ = this.localStorageService.getCitiesObs().pipe(
+      switchMap(cities => this.httpOpenMeteoService.getDailyWeatherData(cities).pipe(
+        map(weatherData => [].concat(weatherData))
+      ))
+    )
+    /*this.localStorageService.getCitiesObs().subscribe(cities => {
+      this.httpOpenMeteoService.getDailyWeatherData(cities).subscribe(weatherData => {
+        console.log('favourites weather data,', weatherData)
+      })
+    });*/
   }
 
   onSearchTermChanged(data: string | City) {
@@ -38,7 +47,7 @@ export class AppComponent implements OnInit{
 
   onSearchByCityClicked(data: City) {
     this.selectedCity = data;
-    this.weatherData$ = this.httpOpenMeteoService.getCurrentWeatherData(data);
+    this.weatherData$ = this.httpOpenMeteoService.getCurrentWeatherData(data) as Observable<WeatherData>;
   }
 
   addOrRemoveFromFavourites(city: City) {

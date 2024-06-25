@@ -1,12 +1,12 @@
 <app-city-search [cities]="cities$ | async" (searchTermChanged)="onSearchTermChanged($event)"
     (searchByCityClicked)="onSearchByCityClicked($event)"></app-city-search>
 
-@if(selectedCity && weatherData$ | async) {
-<app-city-info [city]="selectedCity" [weather]="weatherData$ | async" (addToFavouritesClicked)="addOrRemoveFromFavourites(selectedCity)"></app-city-info>
+@if(selectedCity && weatherData$ | async; as weatherData) {
+<app-city-info [city]="selectedCity" [weather]="weatherData" (addToFavouritesClicked)="addOrRemoveFromFavourites(selectedCity)"></app-city-info>
 }
 
 <div>
-    @for(fav of favouriteCities$| async; track $index) {
-        {{fav.name}} <br/>
+    @for(fav of favouriteCitiesWeather$| async; track $index) {
+        {{fav | json}} <br/>
     } 
 </div>
