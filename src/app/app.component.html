@@ -7,6 +7,6 @@
 
 <div>
     @for(fav of favouriteCitiesWeather$| async; track $index) {
-        {{fav | json}} <br/>
+        <app-favourite-city-card [favCity]="fav"></app-favourite-city-card> <br/>
     } 
 </div>

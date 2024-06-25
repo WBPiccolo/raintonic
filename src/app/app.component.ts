@@ -7,34 +7,34 @@ import { HttpOpenMeteoService } from './core/services/http-open-meteo.service';
 import { CityInfoComponent } from "./shared/components/city-info/city-info.component";
 import { WeatherData } from './core/models/weatherData.model';
 import { LocalStorageService } from './core/models/local-storage.service';
+import { FavouriteCityWeather } from './core/models/favouriteCityWeather.model';
+import { FavouriteCityCardComponent } from "./shared/components/favourite-city-card/favourite-city-card.component";
 
 @Component({
     selector: 'app-root',
     standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    imports: [CommonModule, CitySearchComponent, CityInfoComponent]
+    imports: [CommonModule, CitySearchComponent, CityInfoComponent, FavouriteCityCardComponent]
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   httpOpenMeteoService = inject(HttpOpenMeteoService);
   localStorageService = inject(LocalStorageService)
   cities$: Observable<City[]> = of([]);
   selectedCity: City;
 
-  favouriteCitiesWeather$: Observable<WeatherData[]> = new Observable<WeatherData[]>();
+  favouriteCitiesWeather$: Observable<FavouriteCityWeather[]> = new Observable<FavouriteCityWeather[]>();
   weatherData$: Observable<WeatherData> = new Observable();
 
   ngOnInit(): void {
     this.favouriteCitiesWeather$ = this.localStorageService.getCitiesObs().pipe(
-      switchMap(cities => this.httpOpenMeteoService.getDailyWeatherData(cities).pipe(
-        map(weatherData => [].concat(weatherData))
+      switchMap((cities: City[]) => this.httpOpenMeteoService.getDailyWeatherData(cities).pipe(
+        map((weatherData: WeatherData | WeatherData) => [].concat(weatherData)),
+        map((weatherData: WeatherData[]) => {
+          return cities.map((city, index) => ({city: city, weatherData: weatherData[index]}))
+        })
       ))
-    )
-    /*this.localStorageService.getCitiesObs().subscribe(cities => {
-      this.httpOpenMeteoService.getDailyWeatherData(cities).subscribe(weatherData => {
-        console.log('favourites weather data,', weatherData)
-      })
-    });*/
+    );
   }
 
   onSearchTermChanged(data: string | City) {
@@ -53,7 +53,7 @@ export class AppComponent implements OnInit{
   addOrRemoveFromFavourites(city: City) {
     city.isFavourite = !city.isFavourite;
 
-    if(city.isFavourite) {
+    if (city.isFavourite) {
       this.localStorageService.addCity(city);
     } else {
       this.localStorageService.removeCity(city);
