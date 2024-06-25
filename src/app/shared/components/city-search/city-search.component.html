@@ -3,7 +3,7 @@
     [formControl]="autocompleteFormControl" [matAutocomplete]="auto">
     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selectOption($event)">
       @for (option of cities; track option) {
-      <mat-option [value]="option">{{option.name}}</mat-option>
+      <mat-option [value]="option">{{option.name}} ({{option.country}})</mat-option>
       }
     </mat-autocomplete>
 </mat-form-field>

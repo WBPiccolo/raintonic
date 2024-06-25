@@ -30,20 +30,17 @@ export class CitySearchComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.autocompleteFormControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(newVal => {
-      console.log(newVal);
       this.selectedCity = null;
       this.searchTermChanged.emit(newVal);
     })
   }
 
   emitSearchByCityClicked() {
-    console.log(this.autocompleteFormControl.value, this.selectedCity)
-    this.searchByCityClicked.emit(this.autocompleteFormControl.value);
+    this.searchByCityClicked.emit(this.selectedCity);
   }
 
   selectOption(option: MatAutocompleteSelectedEvent) {
     this.selectedCity = option.option.value;
-
   }
 
   displayFn(city: City): string {

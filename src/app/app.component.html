@@ -1,2 +1,4 @@
-<app-city-search [cities]="(cities | async)!" (searchTermChanged)="onSearchTermChanged($event)"
+<app-city-search [cities]="cities$ | async" (searchTermChanged)="onSearchTermChanged($event)"
     (searchByCityClicked)="onSearchByCityClicked($event)"></app-city-search>
+
+    <app-city-info [city]="selectedCity" [weather]="weatherData$ | async"></app-city-info>
