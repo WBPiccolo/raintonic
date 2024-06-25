@@ -6,5 +6,7 @@
 }
 
 <div>
-    {{localStorageService.getCities() | json}}
+    @for(fav of favouriteCities$| async; track $index) {
+        {{fav.name}} <br/>
+    } 
 </div>

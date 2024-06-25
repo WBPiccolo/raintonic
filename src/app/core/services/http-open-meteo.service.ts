@@ -22,16 +22,25 @@ export class HttpOpenMeteoService {
       .pipe(map(res => res.results));
   }
 
-  getWeatherData(city: City): Observable<WeatherData> {
+  getCurrentWeatherData(city: City): Observable<WeatherData> {
     const url = this.ENDPOINTS.getWeatherData;
     const params = {
       latitude: city.latitude,
       longitude: city.longitude,
-      current: 'temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m',
-      daily: 'weather_code',
-      forecast_days: 1
+      current: 'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,snowfall,weather_code,cloud_cover,pressure_msl,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m'
     }
 
-    return this.http.get<WeatherData>(url, {params: params});
+    return this.http.get<WeatherData>(url, { params: params });
+  }
+
+  getDailyWeatherData(city: City): Observable<WeatherData> {
+    const url = this.ENDPOINTS.getWeatherData;
+    const params = {
+      latitude: city.latitude,
+      longitude: city.longitude,
+      daily: 'weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,daylight_duration,sunshine_duration,uv_index_max,uv_index_clear_sky_max,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_hours,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,shortwave_radiation_sum,et0_fao_evapotranspiration'
+    }
+
+    return this.http.get<WeatherData>(url, {params: params})
   }
 }

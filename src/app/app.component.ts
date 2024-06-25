@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CitySearchComponent } from "./shared/components/city-search/city-search.component";
 import { Observable, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -15,13 +15,18 @@ import { LocalStorageService } from './core/models/local-storage.service';
     styleUrl: './app.component.scss',
     imports: [CommonModule, CitySearchComponent, CityInfoComponent]
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   httpOpenMeteoService = inject(HttpOpenMeteoService);
   localStorageService = inject(LocalStorageService)
   cities$: Observable<City[]> = of([]);
   selectedCity: City;
 
+  favouriteCities$: Observable<City[]> = new Observable<City[]>();
   weatherData$: Observable<WeatherData> = new Observable();
+
+  ngOnInit(): void {
+    this.favouriteCities$ = this.localStorageService.getCitiesObs();
+  }
 
   onSearchTermChanged(data: string | City) {
     if (data instanceof Object) {
@@ -33,7 +38,7 @@ export class AppComponent {
 
   onSearchByCityClicked(data: City) {
     this.selectedCity = data;
-    this.weatherData$ = this.httpOpenMeteoService.getWeatherData(data);
+    this.weatherData$ = this.httpOpenMeteoService.getCurrentWeatherData(data);
   }
 
   addOrRemoveFromFavourites(city: City) {
