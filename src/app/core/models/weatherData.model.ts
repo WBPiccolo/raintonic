@@ -24,6 +24,8 @@ export interface WeatherData {
     surface_pressure: string;
     wind_speed_10m: string;
     wind_direction_10m: string;
+    cloud_cover: string;
+    wind_gusts_10m: string;
   }
   
   interface CurrentWeather {
@@ -38,6 +40,8 @@ export interface WeatherData {
     surface_pressure: number;
     wind_speed_10m: number;
     wind_direction_10m: number;
+    cloud_cover: number;
+    wind_gusts_10m: number;
   }
   
   interface DailyUnits {

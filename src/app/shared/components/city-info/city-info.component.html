@@ -1,68 +1,39 @@
-<div>
-    <h1>{{city?.name}}</h1>
+<div class="mb-8">
+    <div class="flex justify-between w-3/4">
+        <h1>
+            {{city?.name}}
+            <button mat-flat-button (click)="addToFavouritesClicked.emit()">{{city.isFavourite? '(F)' : '( )'}}</button>
+        </h1>
+        <h3>
+            {{deducedWeather}}
+        </h3>
+    </div>
+    <hr class="w-3/4" />
     <h4>{{formattedLocationData}}</h4>
+    <h5>Lat.: {{city.latitude}}°, Long.: {{city.longitude}}°, {{city.elevation}} m above mean sea level</h5>
 </div>
+
+
 <div>
-    <button mat-flat-button (click)="addToFavouritesClicked.emit()">{{city.isFavourite? '( )' : '(o)'}}</button>
+    <p>
+        Local time: {{weather.current.time | date: 'HH:mm dd/MM/yyyy'}}, {{weather.timezone}}
+    </p>
+    <p>
+        Temperature: {{weather.current.temperature_2m}}{{weather.current_units.temperature_2m}},
+        Percieved: {{weather.current.apparent_temperature}}{{weather.current_units.apparent_temperature}},
+        Humidity: {{weather.current.relative_humidity_2m}}{{weather.current_units.relative_humidity_2m}}
+    </p>
+    <p>
+        {{getFormattedOptionalWeatherData('precipitation')}}
+        {{getFormattedOptionalWeatherData('rain')}}
+        {{getFormattedOptionalWeatherData('showers')}}
+        {{getFormattedOptionalWeatherData('rain')}}
+        {{getFormattedOptionalWeatherData('snowfall')}}
+    </p>
+    <p>
+        Wind speed: {{weather.current.wind_speed_10m}}{{weather.current_units.wind_speed_10m}}
+        {{weather.current.wind_direction_10m}} {{weather.current_units.wind_direction_10m}}
+    </p>
+
+
 </div>
-
-<div>
-Ora locale: {{weather.current.time | date: 'HH:mm dd/MM/yyyy'}} <br/>
-Temperatura: {{weather.current.temperature_2m}}{{weather.current_units.temperature_2m}} <br/>
-Temperatura percepita: {{weather.current.apparent_temperature}}{{weather.current_units.apparent_temperature}} <br/>
-Precipitazioni: {{weather.current.precipitation}}{{weather.current_units.precipitation}} <br/>
-</div>
-
-{{weather | json}}
-
-
-<!--
-{
-    "latitude": 42.02,
-    "longitude": -8.0,
-    "generationtime_ms": 0.22399425506591797,
-    "utc_offset_seconds": 0,
-    "timezone": "GMT",
-    "timezone_abbreviation": "GMT",
-    "elevation": 808.0,
-    "current_units": {
-        "time": "iso8601",
-        "interval": "seconds",
-        "temperature_2m": "°C",
-        "relative_humidity_2m": "%",
-        "apparent_temperature": "°C",
-        "precipitation": "mm",
-        "rain": "mm",
-        "weather_code": "wmo code",
-        "surface_pressure": "hPa",
-        "wind_speed_10m": "km/h",
-        "wind_direction_10m": "°"
-    },
-    "current": {
-        "time": "2024-06-25T13:15",
-        "interval": 900,
-        "temperature_2m": 23.1,
-        "relative_humidity_2m": 63,
-        "apparent_temperature": 22.7,
-        "precipitation": 0.00,
-        "rain": 0.00,
-        "weather_code": 0,
-        "surface_pressure": 919.9,
-        "wind_speed_10m": 17.8,
-        "wind_direction_10m": 216
-    },
-    "daily_units": {
-        "time": "iso8601",
-        "weather_code": "wmo code"
-    },
-    "daily": {
-        "time": [
-            "2024-06-25"
-        ],
-        "weather_code": [
-            3
-        ]
-    }
-}
-
--->
