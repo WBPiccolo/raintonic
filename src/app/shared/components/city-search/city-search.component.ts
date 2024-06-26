@@ -44,7 +44,7 @@ export class CitySearchComponent implements OnInit, OnDestroy {
   }
 
   displayFn(city: City): string {
-    return city?.name ? city.name : '';
+    return city?.name ? `${city.name} (${city.country})` : '';
   }
 
   ngOnDestroy(): void {

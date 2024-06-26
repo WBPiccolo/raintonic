@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.favouriteCitiesWeather$ = this.localStorageService.getCitiesObs().pipe(
       switchMap((cities: City[]) => this.httpOpenMeteoService.getDailyWeatherData(cities).pipe(
-        map((weatherData: WeatherData | WeatherData) => [].concat(weatherData)),
+        map((weatherData: WeatherData | WeatherData[]) => [].concat(weatherData)), //force to be an array
         map((weatherData: WeatherData[]) => {
           return cities.map((city, index) => ({city: city, weatherData: weatherData[index]}))
         })

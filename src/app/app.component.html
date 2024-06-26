@@ -1,12 +1,19 @@
-<app-city-search [cities]="cities$ | async" (searchTermChanged)="onSearchTermChanged($event)"
-    (searchByCityClicked)="onSearchByCityClicked($event)"></app-city-search>
-
-@if(selectedCity && weatherData$ | async; as weatherData) {
-<app-city-info [city]="selectedCity" [weather]="weatherData" (addToFavouritesClicked)="addOrRemoveFromFavourites(selectedCity)"></app-city-info>
-}
-
-<div>
-    @for(fav of favouriteCitiesWeather$| async; track $index) {
-        <app-favourite-city-card [favCity]="fav"></app-favourite-city-card> <br/>
-    } 
+<div class="flex justify-around">
+    <app-city-search class="w-1/2" [cities]="cities$ | async" (searchTermChanged)="onSearchTermChanged($event)"
+        (searchByCityClicked)="onSearchByCityClicked($event)"></app-city-search>
 </div>
+
+<div class="p-4">
+@if(selectedCity && weatherData$ | async; as weatherData) {
+<app-city-info [city]="selectedCity" [weather]="weatherData"
+    (addToFavouritesClicked)="addOrRemoveFromFavourites(selectedCity)"></app-city-info>
+} @else {
+    No city selected
+}
+</div>
+
+<!-- <div>
+    @for(fav of favouriteCitiesWeather$| async; track $index) {
+    <app-favourite-city-card [favCity]="fav"></app-favourite-city-card> <br />
+    }
+</div> -->
