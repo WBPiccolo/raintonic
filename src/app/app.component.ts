@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
 
   favouriteCitiesWeather$: Observable<FavouriteCityWeather[]> = new Observable<FavouriteCityWeather[]>();
   weatherData$: Observable<WeatherData> = new Observable();
+  forecastData$: Observable<WeatherData> = new Observable();
 
   sortDirection: 'ASC' | 'DESC' = 'ASC';
 
@@ -47,9 +48,15 @@ export class AppComponent implements OnInit {
 
   }
 
-  onSearchByCityClicked(data: City) {
-    this.selectedCity = data;
-    this.weatherData$ = this.httpOpenMeteoService.getCurrentWeatherData(data) as Observable<WeatherData>;
+  onSearchByCityClicked(selectedCity: City) {
+    this.selectedCity = selectedCity;
+    this.weatherData$ = this.httpOpenMeteoService.getCurrentWeatherData(selectedCity).pipe(
+      map((data: WeatherData | WeatherData[]) => Array.isArray(data)? data[0] : data)
+    );
+
+    this.forecastData$ = this.httpOpenMeteoService.getDailyWeatherData(selectedCity).pipe(
+      map((data: WeatherData | WeatherData[]) => Array.isArray(data)? data[0] : data)
+    );
   }
 
   addOrRemoveFromFavourites(city: City) {

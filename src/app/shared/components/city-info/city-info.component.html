@@ -16,31 +16,46 @@
         </h3>
     </div>
     <hr class="w-3/4" />
-    <h4>{{formattedLocationData}}</h4>
-    <h5>Lat.: {{city.latitude}}°, Long.: {{city.longitude}}°, {{city.elevation}} m above mean sea level</h5>
 </div>
 
-
-<div>
-    <p>
-        Local time: {{weather.current.time | date: 'HH:mm dd/MM/yyyy'}}, {{weather.timezone}}
-    </p>
-    <p>
-        Temperature: {{weather.current.temperature_2m}}{{weather.current_units.temperature_2m}},
-        Percieved: {{weather.current.apparent_temperature}}{{weather.current_units.apparent_temperature}},
-        Humidity: {{weather.current.relative_humidity_2m}}{{weather.current_units.relative_humidity_2m}}
-    </p>
-    <p>
-        {{getFormattedOptionalWeatherData('precipitation')}}
-        {{getFormattedOptionalWeatherData('rain')}}
-        {{getFormattedOptionalWeatherData('showers')}}
-        {{getFormattedOptionalWeatherData('rain')}}
-        {{getFormattedOptionalWeatherData('snowfall')}}
-    </p>
-    <p>
-        Wind speed: {{weather.current.wind_speed_10m}}{{weather.current_units.wind_speed_10m}}
-        {{weather.current.wind_direction_10m}} {{weather.current_units.wind_direction_10m}}
-    </p>
-
-
+<div class="flex justify-around">
+    <div>
+        
+        <h4>{{formattedLocationData}}</h4>
+        <h5>Lat.: {{city.latitude}}°, Long.: {{city.longitude}}°, {{city.elevation}} m above mean sea level</h5>
+        <p>
+            Local time: {{weatherData.current.time | date: 'HH:mm dd/MM/yyyy'}}, {{weatherData.timezone}}
+        </p>
+        <p>
+            Temperature: {{weatherData.current.temperature_2m}}{{weatherData.current_units.temperature_2m}},
+            Percieved: {{weatherData.current.apparent_temperature}}{{weatherData.current_units.apparent_temperature}},
+            Humidity: {{weatherData.current.relative_humidity_2m}}{{weatherData.current_units.relative_humidity_2m}}
+        </p>
+        <p>
+            {{getFormattedOptionalWeatherData('precipitation')}}
+            {{getFormattedOptionalWeatherData('rain')}}
+            {{getFormattedOptionalWeatherData('showers')}}
+            {{getFormattedOptionalWeatherData('rain')}}
+            {{getFormattedOptionalWeatherData('snowfall')}}
+        </p>
+        <p>
+            Wind speed: {{weatherData.current.wind_speed_10m}}{{weatherData.current_units.wind_speed_10m}}
+            {{weatherData.current.wind_direction_10m}} {{weatherData.current_units.wind_direction_10m}}
+        </p>
+    
+    
+    </div>
+    @if(forecastChartData.length) {
+        <ngx-charts-line-chart 
+            [results]="forecastChartData"
+            [view]="chartSize"
+            [legend]="legend"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxis]="xAxis"
+            [yAxis]="yAxis"
+            [timeline]="timeline"
+        ></ngx-charts-line-chart>
+    }    
 </div>
+

@@ -5,7 +5,7 @@
 
 <div class="p-4">
 @if(selectedCity && weatherData$ | async; as weatherData) {
-<app-city-info [city]="selectedCity" [weather]="weatherData"
+<app-city-info [city]="selectedCity" [weatherData]="weatherData" [forecastData]="forecastData$ | async"
     (addToFavouritesClicked)="addOrRemoveFromFavourites(selectedCity)"></app-city-info>
 } @else {
     No city selected

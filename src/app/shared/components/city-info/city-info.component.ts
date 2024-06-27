@@ -3,44 +3,69 @@ import { City } from '../../../core/models/city.model';
 import { CommonModule } from '@angular/common';
 import { WeatherData } from '../../../core/models/weatherData.model';
 import { MatIconModule } from '@angular/material/icon';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @Component({
     selector: 'app-city-info',
     standalone: true,
-    imports: [CommonModule, MatIconModule],
+    imports: [CommonModule, MatIconModule, NgxChartsModule],
     templateUrl: './city-info.component.html',
     styleUrl: './city-info.component.scss'
 })
 export class CityInfoComponent {
     @Input() city: City;
-    @Input() weather: WeatherData;
+    @Input() weatherData: WeatherData;
+    @Input() set forecastData(forecast: WeatherData) {
+        if (!forecast) {
+            this.forecastChartData = [];
+        }
+
+        this.forecastChartData = [
+            { name: 'Max temp', series: forecast.daily.temperature_2m_max.map((temp, index) => ({ value: temp, name: index })) },
+            { name: 'Min temp', series: forecast.daily.temperature_2m_min.map((temp, index) => ({ value: temp, name: index })) }
+        ];
+    }
+
     @Output() addToFavouritesClicked: EventEmitter<MouseEvent> = new EventEmitter();
 
+    forecastChartData = [];
+
+    chartSize: [number, number] = [700, 300];
+    // options
+    legend: boolean = true;
+    showLabels: boolean = true;
+    animations: boolean = true;
+    xAxis: boolean = true;
+    yAxis: boolean = true;
+    showYAxisLabel: boolean = true;
+    showXAxisLabel: boolean = true;
+    timeline: boolean = true;
 
     get formattedLocationData() {
-        const formattedAdmin: string[] = [this.city.admin3, this.city.admin2, this.city.admin1, this.city.country].filter(admin => admin && admin.toLowerCase() != this.city.name.toLowerCase());
+        const formattedAdmin: string[] = [this.city.admin3, this.city.admin2, this.city.admin1, this.city.country]
+            .filter(admin => admin && admin.toLowerCase() != this.city.name.toLowerCase());
         const set = new Set(formattedAdmin);
         return Array.from(set).join(', ');
     }
 
     getFormattedOptionalWeatherData(type: string) {
         const label: string = type.charAt(0).toUpperCase() + type.slice(1);
-        const value = this.weather.current[type];
-        const unit = this.weather.current_units[type];
+        const value = this.weatherData.current[type];
+        const unit = this.weatherData.current_units[type];
 
         return value ? `${label} ${value}${unit}` : '';
     }
 
     get deducedWeather() {
-        const temperature = this.weather.current.temperature_2m;
-        const humidity = this.weather.current.relative_humidity_2m;
-        const apparentTemperature = this.weather.current.apparent_temperature;
-        const precipitation = this.weather.current.precipitation;
-        const cloudCover = this.weather.current.cloud_cover;
-        const windSpeed = this.weather.current.wind_speed_10m;
-        const windDirection = this.weather.current.wind_direction_10m;
-        const windGusts = this.weather.current.wind_gusts_10m;
-        const weatherCode = this.weather.current.weather_code;
+        const temperature = this.weatherData.current.temperature_2m;
+        const humidity = this.weatherData.current.relative_humidity_2m;
+        const apparentTemperature = this.weatherData.current.apparent_temperature;
+        const precipitation = this.weatherData.current.precipitation;
+        const cloudCover = this.weatherData.current.cloud_cover;
+        const windSpeed = this.weatherData.current.wind_speed_10m;
+        const windDirection = this.weatherData.current.wind_direction_10m;
+        const windGusts = this.weatherData.current.wind_gusts_10m;
+        const weatherCode = this.weatherData.current.weather_code;
 
         let skyDescription: string;
         switch (weatherCode) {
