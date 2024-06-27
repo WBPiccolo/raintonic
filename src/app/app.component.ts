@@ -26,6 +26,8 @@ export class AppComponent implements OnInit {
   favouriteCitiesWeather$: Observable<FavouriteCityWeather[]> = new Observable<FavouriteCityWeather[]>();
   weatherData$: Observable<WeatherData> = new Observable();
 
+  sortDirection: 'ASC' | 'DESC' = 'ASC';
+
   ngOnInit(): void {
     this.favouriteCitiesWeather$ = this.localStorageService.getCitiesObs().pipe(
       switchMap((cities: City[]) => this.httpOpenMeteoService.getCurrentWeatherData(cities).pipe(
@@ -64,5 +66,13 @@ export class AppComponent implements OnInit {
     this.onSearchByCityClicked(clickedCity);
   }
 
+  sortFavs() {
+    this.sortDirection = this.sortDirection === 'ASC'? 'DESC' : 'ASC';
+    this.favouriteCitiesWeather$ = this.favouriteCitiesWeather$.pipe(
+      map(favCities => favCities.sort((a, b) => {
+        return this.sortDirection === 'ASC'?  a.weatherData.current.temperature_2m - b.weatherData.current.temperature_2m : b.weatherData.current.temperature_2m - a.weatherData.current.temperature_2m 
+      })),
+    );
+  }
   
 }
