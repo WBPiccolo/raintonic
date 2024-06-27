@@ -1,21 +1,23 @@
 <div class="mb-8">
-    <div class="flex justify-between w-3/4 items-baseline">
-        <h1>
+    <div class="flex justify-between items-baseline">
+        <h1 class="flex">
             {{city?.name}}
-            @if(!city.isFavourite) {
-                <span (click)="addToFavouritesClicked.emit()" class="material-symbols-outlined text-black hover:text-indigo-500  cursor-pointer">
-                    favorite
-                </span>
-            } @else {
-                <button (click)="addToFavouritesClicked.emit()" mat-flat-button><mat-icon fontIcon="favorite" class="text-indigo-500"></mat-icon></button>
+            <div class="px-2">
+                @if(!city.isFavourite) {
+                    <span (click)="addToFavouritesClicked.emit()" class="material-symbols-outlined text-black hover:text-indigo-500  cursor-pointer">
+                        favorite
+                    </span>
+                } @else {
+                    <button (click)="addToFavouritesClicked.emit()" mat-flat-button><mat-icon fontIcon="favorite" class="text-indigo-500"></mat-icon></button>
 
-            }
+                }
+            </div>
         </h1>
         <h3>
             {{deducedWeather}}
         </h3>
     </div>
-    <hr class="w-3/4" />
+    <hr/>
 </div>
 
 <div class="flex justify-around">

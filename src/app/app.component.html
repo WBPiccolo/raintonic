@@ -3,16 +3,16 @@
         (searchByCityClicked)="onSearchByCityClicked($event)"></app-city-search>
 </div>
 
-<div class="p-4">
-@if(selectedCity && weatherData$ | async; as weatherData) {
-<app-city-info [city]="selectedCity" [weatherData]="weatherData" [forecastData]="forecastData$ | async"
-    (addToFavouritesClicked)="addOrRemoveFromFavourites(selectedCity)"></app-city-info>
-} @else {
-    No city selected
-}
+<div class="flex justify-around p-4">
+    @if(selectedCity && weatherData$ | async; as weatherData) {
+        <app-city-info [city]="selectedCity" [weatherData]="weatherData" [forecastData]="forecastData$ | async"
+            (addToFavouritesClicked)="addOrRemoveFromFavourites(selectedCity)"></app-city-info>
+    } @else {
+        No city selected
+    }
 </div>
 
-<div class="p-4 mt-40">
+<div class="p-4 mt-35 w-3/4 mx-auto">
     <div class="flex justify-between w-3/4">
         <h4>
             Favourites cities:
