@@ -1,1 +1,11 @@
-<p>favourite city card: {{favCity | json}}</p>
+<div class="border border-indigo-200 p-4 rounded-md" (click)="onCardClick()">
+    <!-- <div class="text-end"><button class="italic" (click)="onRemoveFromFavourites($event)"> x </button></div> -->
+    <div class="flex justify-between items-baseline">
+        <h3>{{favCity.city.name}}</h3>
+        <h4>{{getMean(favCity.weatherData.daily.temperature_2m_min) | number:'2.0-1'}} {{favCity.weatherData.daily_units.temperature_2m_min}} /
+            {{getMean(favCity.weatherData.daily.temperature_2m_max) | number:'2.0-1'}} {{favCity.weatherData.daily_units.temperature_2m_max}}</h4>
+    </div>
+    <h6>{{today | date:'dd/MM/yyyy'}}</h6>
+    <!-- {{favCity.city.name}} {{favCity.weatherData.daily.apparent_temperature_min}} {{favCity.weatherData.daily.apparent_temperature_min}} / {{favCity.weatherData.daily.apparent_temperature_max}} {{favCity.weatherData.daily.apparent_temperature_max}} -->
+
+</div>

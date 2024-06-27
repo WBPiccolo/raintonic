@@ -58,6 +58,11 @@ export class AppComponent implements OnInit {
     } else {
       this.localStorageService.removeCity(city);
     }
-    //TODO: Localstorage service
   }
+
+  setSelectedCity(clickedCity: City){
+    this.onSearchByCityClicked(clickedCity);
+  }
+
+  
 }

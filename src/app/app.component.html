@@ -12,8 +12,21 @@
 }
 </div>
 
-<!-- <div>
-    @for(fav of favouriteCitiesWeather$| async; track $index) {
-    <app-favourite-city-card [favCity]="fav"></app-favourite-city-card> <br />
+<div class="p-4 mt-40">
+    <h4>
+        Favourites cities:
+    </h4>
+
+    @if(favouriteCitiesWeather$| async; as favouriteCitiesWeather) {
+        @if(favouriteCitiesWeather.length) {
+            <div class="grid grid-cols-4 gap-4">
+                @for(fav of favouriteCitiesWeather; track $index) {
+                    <app-favourite-city-card [favCity]="fav" (cardClicked)="setSelectedCity($event)" (removeFromFavourites)="addOrRemoveFromFavourites($event)"></app-favourite-city-card>
+                    }
+            </div>
+        } @else {
+            No favourites cities found
+        }
     }
-</div> -->
+
+</div>
